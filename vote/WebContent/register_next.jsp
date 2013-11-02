@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+<%
+	String message = (String)request.getParameter("msg");
+	message = new String(message.getBytes("iso8859-1"),"utf-8");
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -43,7 +47,7 @@
 		$( "#button" ).button();
 	});
 	
-	function register() {
+	function verify() {
 		jQuery(document).ready(function() {
 		  jQuery("form")//选择form
 		    .first()//选择第一个 第二个用eq(1) 最后一个 last()
@@ -63,21 +67,20 @@
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
-				<td width="40%" align="right">邮箱：</td>
-				<td><input name="email" style="height: 25px;" size="30px;"></td>
+				<td colspan="2" style="padding-left: 10px;"><%=message %></td>
 			</tr>
 			<tr>
 				<td><font size="1">&nbsp;</font></td>
 			</tr>
 			<tr>
-				<td width="40%" align="right">密码：</td>
-				<td><input name="password" style="height: 25px;" size="30px;"></td>
+				<td width="40%" align="right">验证码：</td>
+				<td><input style="height: 25px;" size="30px;"></td>
 			</tr>
 			<tr>
 				<td><font size="1">&nbsp;</font></td>
 			</tr>
 			<tr>
-				<td colspan="2" align="center"><button onclick="register()" style="font-size: 0.6em;" id="button"><span class="ui-button-text">同意协议并注册</span></button></td>
+				<td colspan="2" align="center"><button onclick="verify()" style="font-size: 0.6em;" id="button"><span class="ui-button-text">点击继续注册</span></button></td>
 			</tr>
 		</table>
 		</form>
