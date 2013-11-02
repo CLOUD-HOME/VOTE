@@ -12,10 +12,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.cloud.util.DBUtil;
 import com.cloud.util.MD5;
 import com.cloud.util.SendMail;
+import com.cloud.util.ValidateCode;
 
 /**
  * Servlet implementation class EmployeeServlet
@@ -48,6 +50,23 @@ public class EmployeeServlet extends HttpServlet {
 			query(request, response);
 		} else if ("insert".equals(method)) {
 			insert(request, response);
+		} else if ("verify".equals(method)) {
+			verify(request, response);
+		}
+	}
+
+	private void verify(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String vcode1 = request.getParameter("vcode");
+		String vcode2 = (String) request.getSession().getAttribute("vcode");
+		String msg = null;
+		if(vcode1.equals(vcode2)) {
+			msg = "恭喜您注册成功！";
+			msg = new String(msg.getBytes("utf-8"),"iso8859-1");
+			response.sendRedirect(request.getContextPath() + "/result.jsp?msg=" + msg);
+		} else {
+			msg = "验证码不正确！";
+			msg = new String(msg.getBytes("utf-8"),"iso8859-1");
+			response.sendRedirect(request.getContextPath() + "/result.jsp?msg=" + msg);
 		}
 	}
 
@@ -88,14 +107,17 @@ public class EmployeeServlet extends HttpServlet {
 		}
 		
 		SendMail sm = new SendMail();
+		String vcode = new ValidateCode().randomString();
 		try {
-			sm.sendVerify(email, emailmd5, randommd5);
+			sm.sendVerify(email, emailmd5, randommd5, vcode);
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		String msg = "★邮件已发送到你的邮箱,请查收邮件获取验证码！";
+		HttpSession session=request.getSession();
+		session.setAttribute("vcode", vcode);
 		msg = new String(msg.getBytes("utf-8"),"iso8859-1");
 		response.sendRedirect(request.getContextPath() + "/register_next.jsp?msg=" + msg);
 	}

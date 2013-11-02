@@ -36,7 +36,7 @@ public class SendMail {
 		
 	
 	
-	public void sendVerify(String stu_email,String stu_nameMd5,String randMd5)
+	public void sendVerify(String stu_email,String stu_nameMd5,String randMd5, String vcode)
 	throws MessagingException {
 		
 		Message message=getMessage();
@@ -48,7 +48,7 @@ public class SendMail {
 			
 			message.setSubject("信号与系统");
 			String m="<a href=\"http://127.0.0.1:8080/verify/mailVerify?stu_nameMd5="+stu_nameMd5+"&randMd5="+randMd5+"\">" +
-					"http://127.0.0.1:8080/verify/mailVerify?stu_nameMd5="+stu_nameMd5+"&randMd5="+randMd5+"</a>";
+					"http://127.0.0.1:8080/verify/mailVerify?stu_nameMd5="+stu_nameMd5+"&randMd5="+randMd5+"</a><br>" + vcode;
 			
 			//"111.167.93.170"为本人电脑临时IP地址
 			
