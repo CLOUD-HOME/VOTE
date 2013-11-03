@@ -3,6 +3,12 @@
 <%
 	String message = (String)request.getParameter("msg");
 	message = new String(message.getBytes("iso8859-1"),"utf-8");
+	String emailmd5 = request.getParameter("emailmd5");
+	String randommd5 = request.getParameter("randommd5");
+	
+	if("".equals(message)) {
+		message = "★请您输入您邮箱里接受到的验证码！";
+	}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -62,6 +68,8 @@
 	<div class="div_border">
 	<div class="div_area">
 		<form method="post">
+			<input type="hidden" name="emailmd5" value="<%=emailmd5%>">
+			<input type="hidden" name="randommd5" value="<%=randommd5%>">
 		<table>
 			<tr>
 				<td>&nbsp;</td>

@@ -3,6 +3,9 @@ package com.cloud.util;
 
 
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.*;
 
 import javax.mail.Session;
@@ -47,13 +50,20 @@ public class SendMail {
 			message.setSentDate(new Date());
 			
 			message.setSubject("信号与系统");
-			String m="<a href=\"http://127.0.0.1:8080/verify/mailVerify?stu_nameMd5="+stu_nameMd5+"&randMd5="+randMd5+"\">" +
-					"http://127.0.0.1:8080/verify/mailVerify?stu_nameMd5="+stu_nameMd5+"&randMd5="+randMd5+"</a><br>" + vcode;
 			
-			//"111.167.93.170"为本人电脑临时IP地址
+			String msg = "";
+			//msg = URLEncoder.encode(msg);
+			//msg = URLDecoder.decode(msg);
+			try {
+				msg = new String(msg.getBytes("utf-8"),"iso8859-1");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			String m="<a href=\"http://127.0.0.1:8080/vote/register_next.jsp?emailmd5="+stu_nameMd5+"&randommd5="
+			+randMd5+"&msg=" + msg +"\">" +"http://127.0.0.1:8080/vote/register_next.jsp?emailmd5="
+			+stu_nameMd5+"&randommd5="+randMd5+"</a><br>您需要输入的验证码为" + vcode;
 			
-			
-			message.setContent(m,"text/html;charset=gb2312");
+			message.setContent(m,"text/html;charset=utf-8");
 			
 			Transport.send(message);
 			

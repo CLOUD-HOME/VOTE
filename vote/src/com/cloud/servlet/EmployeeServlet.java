@@ -56,10 +56,24 @@ public class EmployeeServlet extends HttpServlet {
 	}
 
 	private void verify(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String vcode1 = request.getParameter("vcode");
-		String vcode2 = (String) request.getSession().getAttribute("vcode");
+		String vcode = request.getParameter("vcode");
+		String emailmd5 = request.getParameter("emailmd5");
+		String randommd5 = request.getParameter("randommd5");
 		String msg = null;
-		if(vcode1.equals(vcode2)) {
+		Connection conn = DBUtil.getConn();
+		String sql = "update employee set isactivate = 1 where emailmd5 = ? and randommd5 = ? and vcode = ?";
+		int count = 0;
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, emailmd5);
+			ps.setString(2, randommd5);
+			ps.setString(3, vcode);
+			count = ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(count >= 1) {
 			msg = "恭喜您注册成功！";
 			msg = new String(msg.getBytes("utf-8"),"iso8859-1");
 			response.sendRedirect(request.getContextPath() + "/result.jsp?msg=" + msg);
@@ -80,6 +94,8 @@ public class EmployeeServlet extends HttpServlet {
 		String password = request.getParameter("password");
 		
 		MD5 md5 = new MD5();
+		SendMail sm = new SendMail();
+		String vcode = new ValidateCode().randomString();
 		String emailmd5 = null;
 		String randommd5 = null;
 		try {
@@ -91,14 +107,15 @@ public class EmployeeServlet extends HttpServlet {
 		}
 		
 		Connection conn = DBUtil.getConn();
-		String sql = "insert into employee (email, password, emailmd5, randommd5, isactivate) values (?, ?, ?, ?, ?)";
+		String sql = "insert into employee (email, password, emailmd5, randommd5, vcode, isactivate) values (?, ?, ?, ?, ?, ?)";
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, email);
 			ps.setString(2, password);
 			ps.setString(3, emailmd5);
 			ps.setString(4, randommd5);
-			ps.setString(5, "0");
+			ps.setString(5, vcode);
+			ps.setString(6, "0");
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -106,8 +123,6 @@ public class EmployeeServlet extends HttpServlet {
 			DBUtil.close(conn);
 		}
 		
-		SendMail sm = new SendMail();
-		String vcode = new ValidateCode().randomString();
 		try {
 			sm.sendVerify(email, emailmd5, randommd5, vcode);
 		} catch (MessagingException e) {
@@ -116,10 +131,8 @@ public class EmployeeServlet extends HttpServlet {
 		}
 		
 		String msg = "★邮件已发送到你的邮箱,请查收邮件获取验证码！";
-		HttpSession session=request.getSession();
-		session.setAttribute("vcode", vcode);
 		msg = new String(msg.getBytes("utf-8"),"iso8859-1");
-		response.sendRedirect(request.getContextPath() + "/register_next.jsp?msg=" + msg);
+		response.sendRedirect(request.getContextPath() + "/register_next.jsp?emailmd5=" + emailmd5 + "&randommd5=" + randommd5 + "&msg=" + msg);
 	}
 
 }
