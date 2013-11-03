@@ -19,4 +19,14 @@
     <servlet-name>EmployeeServlet</servlet-name>
     <url-pattern>/EmployeeServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ExaminationServlet</display-name>
+    <servlet-name>ExaminationServlet</servlet-name>
+    <servlet-class>com.cloud.servlet.ExaminationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ExaminationServlet</servlet-name>
+    <url-pattern>/ExaminationServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -1,14 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-<%
-	String message = (String)request.getParameter("msg");
-	message = new String(message.getBytes("iso8859-1"),"utf-8");
-%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.9.0.js"></script>
+		<script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.9.0.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-ui-1.10.0.custom.js"></script>
 <link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/css/ui-lightness/jquery-ui-1.10.0.custom.css">
 <title>Insert title here</title>
@@ -44,11 +40,16 @@
 
 <script type="text/javascript">
 	$(function() {
-		$( "#button" ).button();
+		$( "#button1" ).button();
+		$( "#button2" ).button();
+		$( "#button3" ).button();
+		$( "#button4" ).button();
+		$( "#button5" ).button();
+		$( "#button6" ).button();
 	});
 	
 	function main() {
-		window.location.href = "<%=request.getContextPath()%>/main.jsp";
+		window.location.href = "<%=request.getContextPath()%>/ExaminationServlet?method=find&paperid=1";
 	}
 	
 </script>
@@ -61,16 +62,14 @@
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
-				<td colspan="2" style="padding-left: 10px;"><%=message %></td>
+				<td colspan="5" style="padding-left: 10px;">欢迎来到VOTE调查问卷！</td>
 			</tr>
 			<tr>
-				<td><font size="1">&nbsp;</font></td>
-			</tr>
-			<tr>
-				<td><font size="1">&nbsp;</font></td>
-			</tr>
-			<tr>
-				<td colspan="2" align="center"><button onclick="main()" style="font-size: 0.8em;" id="button"><span class="ui-button-text">点击进入调查问卷首页</span></button></td>
+				<td><button onclick="main()" style="font-size: 0.4em;" id="button1"><span class="ui-button-text">第一套</span></button></td>
+				<td><button onclick="main()" style="font-size: 0.4em;" id="button2"><span class="ui-button-text">第一套</span></button></td>
+				<td><button onclick="main()" style="font-size: 0.4em;" id="button3"><span class="ui-button-text">第一套</span></button></td>
+				<td><button onclick="main()" style="font-size: 0.4em;" id="button4"><span class="ui-button-text">第一套</span></button></td>
+				<td><button onclick="main()" style="font-size: 0.4em;" id="button5"><span class="ui-button-text">第一套</span></button></td>
 			</tr>
 		</table>
 	</div>

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Random;
 
@@ -12,8 +13,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import com.cloud.model.Employee;
 import com.cloud.util.DBUtil;
 import com.cloud.util.MD5;
 import com.cloud.util.SendMail;
@@ -72,8 +73,33 @@ public class EmployeeServlet extends HttpServlet {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			DBUtil.close(conn);
 		}
+		
 		if(count >= 1) {
+			Connection conn1 = DBUtil.getConn();
+			String temp = "select * from employee where isactivate = 1 and emailmd5 = ? and randommd5 = ? and vcode = ?";
+			try {
+				PreparedStatement ps = conn1.prepareStatement(temp);
+				ps.setString(1, emailmd5);
+				ps.setString(2, randommd5);
+				ps.setString(3, vcode);
+				ResultSet rs = ps.executeQuery();
+				while(rs.next()) {
+					Employee e = new Employee();
+					String email = rs.getString("email");
+					String password = rs.getString("password");
+					e.setEmail(email);
+					e.setPassword(password);
+					request.getSession().setAttribute("employee", e);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				DBUtil.close(conn1);
+			}
 			msg = "恭喜您注册成功！";
 			msg = new String(msg.getBytes("utf-8"),"iso8859-1");
 			response.sendRedirect(request.getContextPath() + "/result.jsp?msg=" + msg);
