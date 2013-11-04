@@ -48,7 +48,7 @@
 	});
 	
 	function main() {
-		window.location.href = "<%=request.getContextPath()%>/main.jsp";
+		window.location.href = "<%=request.getContextPath()%>/ExaminationServlet?method=query";
 	}
 	
 </script>

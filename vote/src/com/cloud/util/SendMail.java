@@ -4,17 +4,16 @@ package com.cloud.util;
 
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.*;
+import java.util.Date;
+import java.util.Properties;
 
-import javax.mail.Session;
 import javax.mail.Message;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.InternetAddress;
 import javax.mail.Message.RecipientType;
-import javax.mail.Transport;
 import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 public class SendMail {
 	
@@ -39,11 +38,11 @@ public class SendMail {
 		
 	
 	
-	public void sendVerify(String stu_email,String stu_nameMd5,String randMd5, String vcode)
+	public void sendVerify(String stu_email,String stu_nameMd5,String randMd5, String vcode, String ip)
 	throws MessagingException {
 		
-		Message message=getMessage();
-		
+			Message message=getMessage();
+			
 		
 			message.setFrom(new InternetAddress(username));
 			message.setRecipient(RecipientType.TO,new InternetAddress(stu_email));
@@ -59,8 +58,8 @@ public class SendMail {
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-			String m="<a href=\"http://127.0.0.1:8080/vote/register_next.jsp?emailmd5="+stu_nameMd5+"&randommd5="
-			+randMd5+"&msg=" + msg +"\">" +"http://127.0.0.1:8080/vote/register_next.jsp?emailmd5="
+			String m="<a href=\"http://" + ip + ":8080/vote/register_next.jsp?emailmd5="+stu_nameMd5+"&randommd5="
+			+randMd5+"&msg=" + msg +"\">" +"http://" + ip + ":8080/vote/register_next.jsp?emailmd5="
 			+stu_nameMd5+"&randommd5="+randMd5+"</a><br>您需要输入的验证码为" + vcode;
 			
 			message.setContent(m,"text/html;charset=utf-8");

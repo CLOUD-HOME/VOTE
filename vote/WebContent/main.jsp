@@ -46,6 +46,7 @@
 		$( "#button4" ).button();
 		$( "#button5" ).button();
 		$( "#button6" ).button();
+		$( "#search" ).button();
 	});
 	
 	function main() {
@@ -63,6 +64,12 @@
 			</tr>
 			<tr>
 				<td colspan="5" style="padding-left: 10px;">欢迎来到VOTE调查问卷！</td>
+			</tr>
+			<tr>
+				<td colspan="5" align="right" style="padding-right: 25px;"><input>&nbsp;&nbsp;<button style="font-size: 0.4em;" id="search">搜索</button></td>
+			</tr>
+			<tr>
+				<td><font size="1">&nbsp;</font></td>
 			</tr>
 			<tr>
 				<td><button onclick="main()" style="font-size: 0.4em;" id="button1"><span class="ui-button-text">第一套</span></button></td>

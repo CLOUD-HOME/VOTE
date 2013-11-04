@@ -150,7 +150,8 @@ public class EmployeeServlet extends HttpServlet {
 		}
 		
 		try {
-			sm.sendVerify(email, emailmd5, randommd5, vcode);
+			System.out.println(request.getServerName());
+			sm.sendVerify(email, emailmd5, randommd5, vcode, request.getServerName());
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

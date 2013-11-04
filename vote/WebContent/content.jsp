@@ -60,12 +60,51 @@ background-color: #B7DDA9;
 					<table width="95%" border="0" cellpadding="0" cellspacing="0" align="center">
 						<tr><td> <a name="checkboxjuanbiao"></a><br><br>
  						</td></tr>
+ 						
  						<%
-							List<Examination> elist = (ArrayList<Examination>)request.getAttribute("elist");
+ 							List<Examination> elist = (ArrayList<Examination>)request.getAttribute("elist");
  							int k = 0;
  							for(Iterator<Examination> i = elist.iterator(); i.hasNext();) {
- 								k = k + 1;
  								Examination e = i.next();
+ 								if(!e.getType().equals("0")) {
+ 									continue;
+ 								}
+ 								k = k + 1;
+ 								String content = e.getContent();
+ 								//String temp = content.substring(1).substring(0, content.substring(1).length()-1);
+ 								String[] a1 = (content).split("_");
+ 								content = content.replaceAll("_", "_______");
+ 								System.out.println(a1.length);
+ 								//System.out.println(temp);
+ 						%>
+ 						
+ 						<tr><td><strong><%=content %></strong><br>
+ 							<%
+ 								if(a1.length == 1) {
+ 							%>
+ 								答案：<input name="answer<%=k%>">
+ 							<%
+ 								} else if(a1.length > 1) {
+ 							%>
+ 								答案：
+ 							<%
+ 									for(int j=1; j<a1.length; j++) {
+ 							%>
+ 								<input name="answer<%=k %>">
+ 							<%
+ 									}
+ 								}
+ 							%>
+ 						</td></tr>
+ 						<%
+ 							}
+ 							
+ 							for(Iterator<Examination> i = elist.iterator(); i.hasNext();) {
+ 								Examination e = i.next();
+ 								if(!e.getType().equals("1")) {
+ 									continue;
+ 								}
+ 								k = k + 1;
  								String content = e.getContent();
  								//System.out.println(content);
  								String[] a1 = content.split("\\$");
