@@ -19,8 +19,20 @@ $(function() {
 	$( "#search" ).button();
 });
 </script>
+<style type="text/css">
+   .aa{
+   border-bottom-style:solid;
+   border-bottom-color:#FFFF;
+   border-bottom-width:1px;
+
+   border-top-style:none;
+   border-left-style:none;
+   border-right-style:none;
+   }
+</style>
 </head>
 <body>
 	<button onclick="main()" style="font-size: 0.4em;" id="button1"><span class="ui-button-text">第一套</span></button>
+	<input class="aa" value="xxxxxxxx">	
 </body>
 </html>
