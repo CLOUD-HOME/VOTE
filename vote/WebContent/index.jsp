@@ -41,6 +41,7 @@
 <script type="text/javascript">
 	$(function() {
 		$( "#button" ).button();
+		//$( "#button1" ).button();
 	});
 	
 	function register() {
@@ -61,14 +62,26 @@
 		if (!sReg.test(document.getElementById('email').value)) 
 		{ 
 		       //alert("E-Mail 地址无效,请重新输入!");
-			   $("#vemail").html("E-Mail 地址无效,请重新输入!");
+			   $("#vemail").html("<span style='color:red'>E-Mail 地址无效,请重新输入!</span>");
 			   //alert($("#vemail").html("xxxxxxx"));
 		       document.getElementById('email').focus();
 		       return false; 
 		}
 		else{
-
+			   return true;
 		       //alert("E-Mail 地址无效,请重新输入!");
+		}
+	}
+	
+	function vpassword() {
+		//alert(document.getElementById('password').value.length);
+		if(document.getElementById('password').value.length < 6) {
+			 $("#vpassword").html("<span style='color:red'>请至少设置6个字符以上的密码!</span>");
+			 //alert($("#vemail").html("xxxxxxx"));
+		     document.getElementById('password').focus();
+		     return false; 
+		} else {
+			return true;
 		}
 	}
 	
@@ -80,7 +93,7 @@
 		<form method="post">
 		<table>
 			<tr>
-				<td><strong>宁波思库网络科技有限公司</strong></td>
+				<td style="padding-left: 10px;"><strong>宁波思库网络科技有限公司</strong></td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
@@ -90,17 +103,22 @@
 				<td><input onmouseout="vemail()" id="email" name="email" style="height: 25px;" size="30px;"></td>
 			</tr>
 			<tr>
-				<td><font id="vemail" size="1">&nbsp;mmm</font></td>
+				<td></td>
+				<td><font id="vemail" size="1">&nbsp;请输入您的Email。</font></td>
 			</tr>
 			<tr>
 				<td width="40%" align="right">密码：</td>
-				<td><input type="password" name="password" style="height: 25px;" size="30px;"></td>
+				<td><input onmouseout="vpassword()" type="password" id="password" name="password" style="height: 25px;" size="30px;"></td>
 			</tr>
 			<tr>
-				<td><font size="1">&nbsp;</font></td>
+				<td></td>
+				<td><font id="vpassword" size="1">&nbsp;请设置您的密码。</font></td>
 			</tr>
 			<tr>
-				<td colspan="2" align="center"><button onclick="register()" style="font-size: 0.6em;" id="button"><span class="ui-button-text">同意协议并注册</span></button></td>
+				<!-- 
+				<td colspan="2" align="center"><button onclick="register()" style="font-size: 0.6em;" id="button1"><span class="ui-button-text">同意协议并注册</span></button></td>
+				 -->
+				<td colspan="2" align="center"><input id="button" style="font-size: 0.8em;" value="同意协议并注册" onclick="register()" type="button"></td>
 			</tr>
 		</table>
 		</form>

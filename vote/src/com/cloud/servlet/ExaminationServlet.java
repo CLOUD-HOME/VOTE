@@ -35,8 +35,13 @@ public class ExaminationServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String method = request.getParameter("method");
+		
 		if("find".equals(method)) {
 			find(request, response);
+		} else if("query".equals(method)) {
+			query(request, response);
+		} else if("search".equals(method)) {
+			search(request, response);
 		}
 	}
 
@@ -63,6 +68,7 @@ public class ExaminationServlet extends HttpServlet {
 				e.setId(rs.getInt("id"));
 				e.setPaperid(rs.getInt("paperid"));
 				e.setType(rs.getString("type"));
+				e.setPapername(rs.getString("papername"));
 				elist.add(e);
 			}
 			request.setAttribute("elist", elist);
@@ -75,5 +81,55 @@ public class ExaminationServlet extends HttpServlet {
 		}
 	}
 	
+	
+	private void query(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Connection conn = DBUtil.getConn();
+		String temp = "select distinct paperid, papername from examination order by id desc limit 0, 10";
+		try {
+			PreparedStatement ps = conn.prepareStatement(temp);
+			ResultSet rs = ps.executeQuery();
+			List<Examination> plist = new ArrayList<Examination>();
+			while(rs.next()) {
+				Examination e = new Examination();
+				e.setPaperid(rs.getInt("paperid"));
+				e.setPapername(rs.getString("papername"));
+				plist.add(e);
+			}
+			request.setAttribute("plist", plist);
+			request.getRequestDispatcher("/main.jsp").forward(request, response);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(conn);
+		}
+	}
+	
+	
+	private void search(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Connection conn = DBUtil.getConn();
+		String keyword = request.getParameter("keyword");
+		keyword = new String(keyword.getBytes("iso8859-1"),"utf-8");
+		String temp = "select distinct paperid, papername from examination where papername like '%" + keyword + "%'";
+		try {
+			PreparedStatement ps = conn.prepareStatement(temp);
+			ResultSet rs = ps.executeQuery();
+			List<Examination> plist = new ArrayList<Examination>();
+			while(rs.next()) {
+				Examination e = new Examination();
+				e.setPaperid(rs.getInt("paperid"));
+				e.setPapername(rs.getString("papername"));
+				plist.add(e);
+			}
+			request.setAttribute("plist", plist);
+			request.getRequestDispatcher("/main.jsp").forward(request, response);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(conn);
+		}
+	}
+
 
 }

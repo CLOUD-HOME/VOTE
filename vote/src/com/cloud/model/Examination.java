@@ -6,6 +6,7 @@ public class Examination {
 	private String content;
 	private String type;
 	private String answer;
+	private String papername;
 	public Integer getId() {
 		return id;
 	}
@@ -35,6 +36,12 @@ public class Examination {
 	}
 	public void setAnswer(String answer) {
 		this.answer = answer;
+	}
+	public String getPapername() {
+		return papername;
+	}
+	public void setPapername(String papername) {
+		this.papername = papername;
 	}
 	
 	

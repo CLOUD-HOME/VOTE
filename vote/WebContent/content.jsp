@@ -65,13 +65,21 @@ background-color: #B7DDA9;
 		<tr>
 			<td>
 				<div class="style123w">
-					<h2 align="center">卡特尔16PF测试</h2>
+					<%
+ 							List<Examination> elist = (ArrayList<Examination>)request.getAttribute("elist");
+							for(Iterator<Examination> i = elist.iterator(); i.hasNext();) {
+								Examination e = i.next();
+					%>
+					<h2 align="center"><%=e.getPapername() %></h2>
+					<%
+								break;
+							}
+					%>
 					<table width="95%" border="0" cellpadding="0" cellspacing="0" align="center">
 						<tr><td> <a name="checkboxjuanbiao"></a><br><br>
  						</td></tr>
  						
  						<%
- 							List<Examination> elist = (ArrayList<Examination>)request.getAttribute("elist");
  							int k = 0;
  							for(Iterator<Examination> i = elist.iterator(); i.hasNext();) {
  								Examination e = i.next();

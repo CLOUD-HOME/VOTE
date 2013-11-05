@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+<%@ page import="java.util.*" %>
+<%@ page import="com.cloud.model.Examination" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -40,19 +42,28 @@
 
 <script type="text/javascript">
 	$(function() {
-		$( "#button1" ).button();
-		$( "#button2" ).button();
-		$( "#button3" ).button();
-		$( "#button4" ).button();
-		$( "#button5" ).button();
-		$( "#button6" ).button();
-		$( "#search" ).button();
+			$("#search").button();
+		<%
+			List<Examination> elist = (ArrayList<Examination>)request.getAttribute("plist");
+			int k = 0;
+			int m = 0;
+			for(Iterator<Examination> i = elist.iterator(); i.hasNext();) {
+				Examination e = i.next();
+				k = k + 1;
+		%>
+			$("#button<%=k %>").button();
+		<%
+			}
+		%>
 	});
 	
-	function main() {
-		window.location.href = "<%=request.getContextPath()%>/ExaminationServlet?method=find&paperid=1";
+	function main(paperid) {
+		window.location.href = "<%=request.getContextPath()%>/ExaminationServlet?method=find&paperid=" + paperid;
 	}
 	
+	function query() {
+		window.location.href = "<%=request.getContextPath()%>/ExaminationServlet?method=search&keyword=" + $("#keyword").val();
+	}
 </script>
 </head>
 <body>
@@ -63,21 +74,36 @@
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
-				<td colspan="5" style="padding-left: 10px;">欢迎来到VOTE调查问卷！</td>
+				<td colspan="5" style="padding-left: 10px;">请选择或者搜索你将要答的试卷！</td>
 			</tr>
 			<tr>
-				<td colspan="5" align="right" style="padding-right: 25px;"><input>&nbsp;&nbsp;<button style="font-size: 0.4em;" id="search">搜索</button></td>
+				<td colspan="5" align="right" style="padding-right: 25px;"><input id="keyword" value="">&nbsp;&nbsp;<button onclick="query()" style="font-size: 0.4em;" id="search">搜索</button></td>
 			</tr>
 			<tr>
 				<td><font size="1">&nbsp;</font></td>
 			</tr>
+			<%
+				for(Iterator<Examination> i = elist.iterator(); i.hasNext();) {
+						
+			%>
+			
 			<tr>
-				<td><button onclick="main()" style="font-size: 0.4em;" id="button1"><span class="ui-button-text">第一套</span></button></td>
-				<td><button onclick="main()" style="font-size: 0.4em;" id="button2"><span class="ui-button-text">第一套</span></button></td>
-				<td><button onclick="main()" style="font-size: 0.4em;" id="button3"><span class="ui-button-text">第一套</span></button></td>
-				<td><button onclick="main()" style="font-size: 0.4em;" id="button4"><span class="ui-button-text">第一套</span></button></td>
-				<td><button onclick="main()" style="font-size: 0.4em;" id="button5"><span class="ui-button-text">第一套</span></button></td>
+				<%
+					for(int j=0; j<4; j++) {
+						if(!i.hasNext()) {
+							break;
+						}
+						m = m + 1;
+						Examination e = i.next();
+				%>
+				<td><button onclick="main(<%=e.getPaperid() %>)" style="font-size: 0.4em;" id="button<%=m %>"><span class="ui-button-text"><%=e.getPapername() %></span></button></td>
+				<%
+					}
+				%>
 			</tr>
+			<%
+				}
+			%>
 		</table>
 	</div>
 	</div>
