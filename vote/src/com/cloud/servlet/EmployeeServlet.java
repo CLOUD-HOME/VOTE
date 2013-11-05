@@ -119,6 +119,35 @@ public class EmployeeServlet extends HttpServlet {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		
+		Connection c = DBUtil.getConn();
+		String t = "select * from employee where isactivate = 1 and email = ?";
+		try {
+			PreparedStatement ps = c.prepareStatement(t);
+			ps.setString(1, email);
+			ResultSet rs = ps.executeQuery();
+			Employee e = new Employee();
+			while (rs.next()) {
+				e.setId(rs.getInt("id"));
+				e.setEmail(rs.getString("email"));
+				e.setPassword(rs.getString("password"));
+			}
+			if(e.getPassword() != null) {
+				if(e.getPassword().equals(password)) {
+					request.getSession().setAttribute("employee", e);
+					response.sendRedirect(request.getContextPath()+ "/ExaminationServlet?method=query");
+					return;
+				} else {
+					String msg = "登录失败，您的邮箱或者地址不正确！";
+					msg = new String(msg.getBytes("utf-8"),"iso8859-1");
+					response.sendRedirect(request.getContextPath()+ "/register.jsp?msg=" + msg);
+					return;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(c);
+		}
 		MD5 md5 = new MD5();
 		SendMail sm = new SendMail();
 		String vcode = new ValidateCode().randomString();

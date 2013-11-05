@@ -58,7 +58,11 @@
 	});
 	
 	function main(paperid) {
+		<%if (request.getSession().getAttribute("employee") != null) {%>
 		window.location.href = "<%=request.getContextPath()%>/ExaminationServlet?method=find&paperid=" + paperid;
+		<%} else {%>
+		window.location.href = "<%=request.getContextPath()%>/register.jsp?method=find&paperid=" + paperid;
+		<%}%>
 	}
 	
 	function query() {
@@ -71,13 +75,13 @@
 	<div class="div_area">
 		<table>
 			<tr>
-				<td>&nbsp;</td>
+				<td style="padding-left: 10px;"><strong>宁波思库网络科技有限公司欢迎您！</strong></td>
 			</tr>
 			<tr>
-				<td colspan="5" style="padding-left: 10px;">请选择或者搜索你将要答的试卷！</td>
+				<td colspan="5" style="padding-left: 10px;">&nbsp;</td>
 			</tr>
 			<tr>
-				<td colspan="5" align="right" style="padding-right: 25px;"><input id="keyword" value="">&nbsp;&nbsp;<button onclick="query()" style="font-size: 0.4em;" id="search">搜索</button></td>
+				<td colspan="5" align="right" style="padding-right: 25px;"><input id="keyword" value="在此搜索试卷">&nbsp;&nbsp;<button onclick="query()" style="font-size: 0.4em;" id="search">搜索</button></td>
 			</tr>
 			<tr>
 				<td><font size="1">&nbsp;</font></td>
