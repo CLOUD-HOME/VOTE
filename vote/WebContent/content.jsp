@@ -2,6 +2,13 @@
     pageEncoding="utf-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="com.cloud.model.Examination" %>
+<%@ page import="com.cloud.model.Employee" %>
+<%
+	Employee employee = (Employee)request.getSession().getAttribute("employee");
+	if(employee == null) {
+		response.sendRedirect(request.getContextPath() + "/register.jsp");
+	}
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -65,16 +72,21 @@ background-color: #B7DDA9;
 		<tr>
 			<td>
 				<div class="style123w">
-					<%
+					<%		
+							int fcount = 0;
+							int scount = 0;
+							Integer paperid = null;
  							List<Examination> elist = (ArrayList<Examination>)request.getAttribute("elist");
 							for(Iterator<Examination> i = elist.iterator(); i.hasNext();) {
 								Examination e = i.next();
+								paperid = e.getPaperid();
 					%>
 					<h2 align="center"><%=e.getPapername() %></h2>
 					<%
 								break;
 							}
 					%>
+					<form method="post" action="<%=request.getContextPath()%>/AnswerServlet?method=insert">
 					<table width="95%" border="0" cellpadding="0" cellspacing="0" align="center">
 						<tr><td> <a name="checkboxjuanbiao"></a><br><br>
  						</td></tr>
@@ -98,23 +110,19 @@ background-color: #B7DDA9;
  							<%
  								if(a1.length == 1) {
  							%>
- 						<tr><td><strong><%=content.replaceAll("_", "<input class='input_line' name=answer" + k + ">") %></strong><br>
- 							<!-- 
- 								答案：<input name="answer<%=k%>">
- 							 -->
+ 						<tr><td><strong><%=content.replaceAll("_", "<input class='input_line' name='answer" + k + "'>") %></strong><br>
+ 								<input type="hidden" value="<%=e.getId() %>" name="id<%=k%>">
  							<%
  								} else if(a1.length > 1) {
  							%>
- 						<tr><td><strong><%=content.replaceAll("_", "<input class='input_line' name=answer" + k + ">") %></strong><br>
+ 						<tr><td><strong><%=content.replaceAll("_", "<input class='input_line' name='answer" + k + "'>") %></strong><br>
  							<!-- 
  								答案：
  							-->
  							<%
  									for(int j=1; j<a1.length; j++) {
  							%>
- 							<!-- 
- 								<input name="answer<%=k %>">
- 							-->
+ 								<input type="hidden" value="<%=e.getId() %>" name="id<%=k%>">
  							<%
  									}
  								}
@@ -122,7 +130,7 @@ background-color: #B7DDA9;
  						</td></tr>
  						<%
  							}
- 							
+ 							fcount = k;
  							for(Iterator<Examination> i = elist.iterator(); i.hasNext();) {
  								Examination e = i.next();
  								if(!e.getType().equals("1")) {
@@ -139,6 +147,7 @@ background-color: #B7DDA9;
  						<tr><td> <a name="answer1juanbiao"></a><br>
  							<span class="style1"> <strong><%=a1[0] %></strong>
 							<br><br>
+							<input type="hidden" value="<%=e.getId() %>" name="id<%=k%>">
 							<%
 								for(int j=0; j<a2.length; j++) {
 							%>
@@ -151,11 +160,16 @@ background-color: #B7DDA9;
 						</td></tr>
 						<%
  							}
+ 							scount = k - fcount;
 						%>
 						<tr>
 							<td colspan="2" align="center"><button onclick="main()" style="font-size: 1.0em;" id="button"><span class="ui-button-text">提交答案</span></button></td>
 						</tr>
 					</table>
+					<input type="hidden" value="<%=fcount %>" name="fcount">
+					<input type="hidden" value="<%=scount %>" name="scount">
+					<input type="hidden" value="<%=paperid %>" name="paperid">
+					</form>
 				</div>
 			</td>
 		</tr>

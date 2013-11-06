@@ -66,7 +66,15 @@
 	}
 	
 	function query() {
+		if($("#keyword").val() == "") {
+			$("#keyword").val("不可以为空哦！");
+			return;
+		}
 		window.location.href = "<%=request.getContextPath()%>/ExaminationServlet?method=search&keyword=" + $("#keyword").val();
+	}
+	
+	function empty() {
+		$("#keyword").val("");
 	}
 </script>
 </head>
@@ -81,7 +89,7 @@
 				<td colspan="5" style="padding-left: 10px;">&nbsp;</td>
 			</tr>
 			<tr>
-				<td colspan="5" align="right" style="padding-right: 25px;"><input id="keyword" value="在此搜索试卷">&nbsp;&nbsp;<button onclick="query()" style="font-size: 0.4em;" id="search">搜索</button></td>
+				<td colspan="5" align="right" style="padding-right: 25px;"><input id="keyword" onfocus="empty()" style="color: gray" value="请输入试卷名称">&nbsp;&nbsp;<button onclick="query()" style="font-size: 0.4em;" id="search">搜索</button></td>
 			</tr>
 			<tr>
 				<td><font size="1">&nbsp;</font></td>
@@ -90,7 +98,6 @@
 				for(Iterator<Examination> i = elist.iterator(); i.hasNext();) {
 						
 			%>
-			
 			<tr>
 				<%
 					for(int j=0; j<4; j++) {
@@ -105,6 +112,11 @@
 					}
 				%>
 			</tr>
+			<%
+				}
+				if(elist.size() == 0) {
+			%>
+				<tr><td style="color: red;" align="center">对不起，没有你要找的试题，请更换关键字!</td></tr>
 			<%
 				}
 			%>

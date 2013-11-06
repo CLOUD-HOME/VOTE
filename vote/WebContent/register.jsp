@@ -96,6 +96,7 @@
 <body>
 	<div class="div_border">
 	<div class="div_area">
+		<form method="post">
 		<table>
 			<tr>
 				<td style="padding-left: 10px;"><strong>宁波思库网络科技有限公司</strong></td>
@@ -103,7 +104,6 @@
 			<tr>
 				<td>&nbsp;</td>
 			</tr>
-		<form method="post">
 			<tr>
 				<td width="40%" align="right">邮箱：</td>
 				<td><input onmouseout="vemail()" id="email" name="email" style="height: 25px;" size="30px;"></td>
@@ -124,14 +124,11 @@
 				<td><font id="vpassword" size="1">&nbsp;<span style='color:red'><%=new String(request.getParameter("msg").getBytes("iso8859-1"),"utf-8") %></span></font></td>
 				<%} %>
 			</tr>
-		</form>
 			<tr>
-				<td colspan="2" align="center"><button onclick="register()" style="font-size: 0.6em;" id="button"><span class="ui-button-text">同意协议并注册</span></button></td>
-				<!-- 
-				<td colspan="2" align="center"><input id="button" style="font-size: 0.8em;" value="同意协议并注册" onclick="register()" type="button"></td>
-				 -->
+				<td colspan="2" align="center"><button type="button" onclick="register()" style="font-size: 0.6em;" id="button"><span class="ui-button-text">同意协议并注册</span></button></td>
 			</tr>
 		</table>
+		</form>
 	</div>
 	</div>
 </body>
