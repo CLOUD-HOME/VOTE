@@ -16,7 +16,7 @@ public class DBUtil {
             //if(path.toString().contains("vcap")) {
             //	conn = DriverManager.getConnection("jdbc:mysql://10.4.3.233:3306/d079c75dcb6774864a29fb39f682e0bb0", "ul2C8QGJ0msUJ", "pfOE1ki60EExS");  
             //}else {
-            	conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/vote?useUnicode=true&characterEncoding=utf8", "root", "snow");  
+            	conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/vote?useUnicode=true&characterEncoding=utf8", "root", "myroot");  
            // }
             if(null != conn) {  
                 return conn;  

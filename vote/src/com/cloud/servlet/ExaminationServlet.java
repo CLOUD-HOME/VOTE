@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONArray;
 
-
 import com.cloud.model.Examination;
 import com.cloud.util.DBUtil;
 
@@ -54,8 +53,36 @@ public class ExaminationServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		String method = request.getParameter("method");
+		if("insert".equals(method)) {
+			insert(request, response);
+		}
 	}
+	
+	private void insert(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String paperid = request.getParameter("paperid");
+		String papername = request.getParameter("papername");
+		String content = request.getParameter("content");
+		String type = request.getParameter("type");
+		String answer = request.getParameter("answer");
+		Connection conn = DBUtil.getConn();
+		String sql = "insert into examination values (null, ?, ?, ?, ?, ?)";
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, paperid);
+			ps.setString(2, papername);
+			ps.setString(3, content);
+			ps.setString(4, type);
+			ps.setString(5, answer);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(conn);
+		}
+	}
+
 	
 	private void find(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String paperid = request.getParameter("paperid");
@@ -155,8 +182,8 @@ public class ExaminationServlet extends HttpServlet {
 			}
 			response.setContentType("text/html;charset=utf-8");
 			String a = JSONArray.fromObject(elist).toString();
-			String json = "{\"total\":\"1\",\"rows\":[{\"id\":\"41525\",\"firstname\":\"ddd\",\"lastname\":\"dfsa \",\"phone\":\"34343df\",\"email\":\"\"}]}";
-			//String json = "{\"total\":\"" + 7 + "\", \"rows\":" + JSONArray.fromObject(elist).toString() + "}";
+			//String json = "{\"total\":\"1\",\"rows\":[{\"id\":\"41525\",\"firstname\":\"ddd\",\"lastname\":\"dfsa \",\"phone\":\"34343df\",\"email\":\"\"}]}";
+			String json = "{\"total\":\"" + 7 + "\", \"rows\":" + JSONArray.fromObject(elist).toString() + "}";
 			response.getWriter().write(json);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

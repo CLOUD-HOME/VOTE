@@ -5,62 +5,69 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <title>Insert title here</title>
-    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/default/easyui.css">
-    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/icon.css">
-    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/demo/demo.css">
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.min.js"></script>
-    <script type="text/javascript" src="http://www.jeasyui.com/easyui/jquery.easyui.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/easyui/demo/demo.css">
+<script type="text/javascript" src="<%=request.getContextPath() %>/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath() %>/easyui/jquery.easyui.min.js"></script>
+<style type="text/css">
+	input{
+		width: 200px;
+	}
+</style>
 </head>
 <body>
-    <h2>Basic CRUD Application</h2>
-    <div class="demo-info" style="margin-bottom:10px">
-        <div class="demo-tip icon-tip">&nbsp;</div>
-        <div>Click the buttons on datagrid toolbar to do crud actions.</div>
-    </div>
+    <h2>试题维护页面</h2>
     
-    <table id="dg" title="My Users" class="easyui-datagrid" style="width:700px;height:250px"
+    <table id="dg" title="试题列表" class="easyui-datagrid" style="width:1000px;height:500px"
+    		data-options="singleSelect:true,collapsible:true,url:'<%=request.getContextPath() %>/ExaminationServlet?method=querye',method:'get'"
             <%--
     		url="get_users.php"
             url="http://www.jeasyui.com/demo/main/get_users.php"
             url="<%=request.getContextPath() %>/ExaminationServlet?method=querye"
-            --%>
             url="http://localhost:8080/vote/ExaminationServlet?method=querye"
+            --%>
             toolbar="#toolbar" pagination="true"
             rownumbers="true" fitColumns="true" singleSelect="true">
         <thead>
             <tr>
-                <th field="firstname" width="50">First Name</th>
-                <th field="lastname" width="50">Last Name</th>
-                <th field="phone" width="50">Phone</th>
-                <th field="email" width="50">Email</th>
+                <th field="paperid" width="15">试卷标识</th>
+                <th field="papername" width="50">试卷标题</th>
+                <th field="content" width="100">试题内容</th>
+                <th field="type" width="15">试题类型</th>
+                <th field="answer" width="50">试题答案</th>
             </tr>
         </thead>
     </table>
     <div id="toolbar">
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUser()">New User</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">Edit User</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyUser()">Remove User</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUser()">添加试题</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">编辑试题</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyUser()">删除试题</a>
     </div>
     
-    <div id="dlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+    <div id="dlg" class="easyui-dialog" style="width:500px;height:350px;padding:10px 20px"
             closed="true" buttons="#dlg-buttons">
-        <div class="ftitle">User Information</div>
+        <div class="ftitle">试题信息</div>
         <form id="fm" method="post" novalidate>
             <div class="fitem">
-                <label>First Name:</label>
+                <label>试题标识：</label>
+                <input name="paperid" class="easyui-validatebox" required="true">
+            </div>
+            <div class="fitem">
+                <label>试题名称：</label>
+                <input name="papername" class="easyui-validatebox" required="true">
+            </div>
+            <div class="fitem">
+                <label>试题内容：</label>
                 <input name="content" class="easyui-validatebox" required="true">
             </div>
             <div class="fitem">
-                <label>Last Name:</label>
-                <input name="lastname" class="easyui-validatebox" required="true">
+                <label>试题类型：</label>
+                <input name="type" class="easyui-validatebox" required="true">
             </div>
             <div class="fitem">
-                <label>Phone:</label>
-                <input name="phone">
-            </div>
-            <div class="fitem">
-                <label>Email:</label>
-                <input name="email" class="easyui-validatebox" validType="email">
+                <label>试题答案：</label>
+                <input name="answer">
             </div>
         </form>
     </div>
@@ -73,7 +80,7 @@
         function newUser(){
             $('#dlg').dialog('open').dialog('setTitle','New User');
             $('#fm').form('clear');
-            url = 'save_user.php';
+            url = '<%=request.getContextPath() %>/ExaminationServlet?method=insert';
         }
         function editUser(){
             var row = $('#dg').datagrid('getSelected');
