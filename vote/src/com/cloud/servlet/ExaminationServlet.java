@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
+
 
 import com.cloud.model.Examination;
 import com.cloud.util.DBUtil;
@@ -151,7 +153,11 @@ public class ExaminationServlet extends HttpServlet {
 				e.setType(rs.getString("type"));
 				elist.add(e);
 			}
-			request.setAttribute("elist", elist);
+			response.setContentType("text/html;charset=utf-8");
+			String a = JSONArray.fromObject(elist).toString();
+			String json = "{\"total\":\"1\",\"rows\":[{\"id\":\"41525\",\"firstname\":\"ddd\",\"lastname\":\"dfsa \",\"phone\":\"34343df\",\"email\":\"\"}]}";
+			//String json = "{\"total\":\"" + 7 + "\", \"rows\":" + JSONArray.fromObject(elist).toString() + "}";
+			response.getWriter().write(json);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
