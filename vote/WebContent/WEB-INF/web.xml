@@ -29,4 +29,14 @@
     <servlet-name>ExaminationServlet</servlet-name>
     <url-pattern>/ExaminationServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AnswerServlet</display-name>
+    <servlet-name>AnswerServlet</servlet-name>
+    <servlet-class>com.cloud.servlet.AnswerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AnswerServlet</servlet-name>
+    <url-pattern>/AnswerServlet</url-pattern>
+  </servlet-mapping>
 </web-app>
