@@ -53,6 +53,8 @@ public class EmployeeServlet extends HttpServlet {
 			insert(request, response);
 		} else if ("verify".equals(method)) {
 			verify(request, response);
+		} else if ("login".equals(method)) {
+			login(request, response);
 		}
 	}
 
@@ -189,6 +191,43 @@ public class EmployeeServlet extends HttpServlet {
 		String msg = "★邮件已发送到你的邮箱,请查收邮件获取验证码！";
 		msg = new String(msg.getBytes("utf-8"),"iso8859-1");
 		response.sendRedirect(request.getContextPath() + "/register_next.jsp?emailmd5=" + emailmd5 + "&randommd5=" + randommd5 + "&msg=" + msg);
+	}
+	
+	
+	private void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String email = request.getParameter("email");
+		String password = request.getParameter("password");
+		
+		Connection c = DBUtil.getConn();
+		String t = "select * from employee where password = ? and email = ? and isactivate = 2";
+		try {
+			PreparedStatement ps = c.prepareStatement(t);
+			ps.setString(1, password);
+			ps.setString(2, email);
+			ResultSet rs = ps.executeQuery();
+			Employee e = new Employee();
+			while (rs.next()) {
+				e.setId(rs.getInt("id"));
+				e.setEmail(rs.getString("email"));
+				e.setPassword(rs.getString("password"));
+			}
+			if(e.getPassword() != null) {
+				request.getSession().setAttribute("employee", e);
+				response.getWriter().write("1");
+				//request.getRequestDispatcher("/admin/main.jsp").forward(request, response);
+				//response.sendRedirect(request.getContextPath()+ "/admin/main.jsp");
+			} else {
+				String msg = "登录失败，您的邮箱或者地址不正确！";
+				msg = new String(msg.getBytes("utf-8"),"iso8859-1");
+				//response.sendRedirect(request.getContextPath()+ "/index.jsp?msg=" + msg);
+				//return;
+				response.getWriter().write("0");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(c);
+		}
 	}
 
 }

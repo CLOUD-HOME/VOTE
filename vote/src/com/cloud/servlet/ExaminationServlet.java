@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 import com.cloud.model.Examination;
 import com.cloud.util.DBUtil;
 
@@ -42,6 +43,8 @@ public class ExaminationServlet extends HttpServlet {
 			query(request, response);
 		} else if("search".equals(method)) {
 			search(request, response);
+		} else if("querye".equals(method)) {
+			querye(request,response);
 		}
 	}
 
@@ -131,5 +134,30 @@ public class ExaminationServlet extends HttpServlet {
 		}
 	}
 
+	private void querye(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String sql = "select * from examination";
+		Connection conn = DBUtil.getConn();
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			List<Examination> elist = new ArrayList<Examination>();
+			while(rs.next()) {
+				Examination e = new Examination();
+				e.setPaperid(rs.getInt("paperid"));
+				e.setPapername(rs.getString("papername"));
+				e.setAnswer(rs.getString("answer"));
+				e.setId(rs.getInt("id"));
+				e.setContent(rs.getString("content"));
+				e.setType(rs.getString("type"));
+				elist.add(e);
+			}
+			request.setAttribute("elist", elist);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(conn);
+		}
+	}
 
 }
