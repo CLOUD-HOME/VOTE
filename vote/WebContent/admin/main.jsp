@@ -49,6 +49,7 @@
             closed="true" buttons="#dlg-buttons">
         <div class="ftitle">试题信息</div>
         <form id="fm" method="post" novalidate>
+        	<input type="hidden" name="id">
             <div class="fitem">
                 <label>试题标识：</label>
                 <input name="paperid" class="easyui-validatebox" required="true">
@@ -72,22 +73,22 @@
         </form>
     </div>
     <div id="dlg-buttons">
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveUser()">Save</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">Cancel</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveUser()">保存</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">取消</a>
     </div>
     <script type="text/javascript">
         var url;
         function newUser(){
-            $('#dlg').dialog('open').dialog('setTitle','New User');
+            $('#dlg').dialog('open').dialog('setTitle','添加试题');
             $('#fm').form('clear');
             url = '<%=request.getContextPath() %>/ExaminationServlet?method=insert';
         }
         function editUser(){
             var row = $('#dg').datagrid('getSelected');
             if (row){
-                $('#dlg').dialog('open').dialog('setTitle','Edit User');
+                $('#dlg').dialog('open').dialog('setTitle','编辑试题');
                 $('#fm').form('load',row);
-                url = 'update_user.php?id='+row.id;
+                url = '<%=request.getContextPath() %>/ExaminationServlet?method=update' + row.id;
             }
         }
         function saveUser(){
@@ -113,7 +114,7 @@
         function destroyUser(){
             var row = $('#dg').datagrid('getSelected');
             if (row){
-                $.messager.confirm('Confirm','Are you sure you want to destroy this user?',function(r){
+                $.messager.confirm('确认','您确认要删除当前所选择的记录吗？',function(r){
                     if (r){
                         $.post('destroy_user.php',{id:row.id},function(result){
                             if (result.success){

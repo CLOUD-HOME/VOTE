@@ -56,6 +56,8 @@ public class ExaminationServlet extends HttpServlet {
 		String method = request.getParameter("method");
 		if("insert".equals(method)) {
 			insert(request, response);
+		} else if("update".equals(method)) {
+			update(request, response);
 		}
 	}
 	
@@ -74,6 +76,32 @@ public class ExaminationServlet extends HttpServlet {
 			ps.setString(3, content);
 			ps.setString(4, type);
 			ps.setString(5, answer);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(conn);
+		}
+	}
+	
+	private void update(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String id = request.getParameter("id");
+		String paperid = request.getParameter("paperid");
+		String papername = request.getParameter("papername");
+		String content = request.getParameter("content");
+		String type = request.getParameter("type");
+		String answer = request.getParameter("answer");
+		Connection conn = DBUtil.getConn();
+		String sql = "update examination set paperid = ?, papername = ?, content = ?, type = ?, answer = ? where id = ?";
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, paperid);
+			ps.setString(2, papername);
+			ps.setString(3, content);
+			ps.setString(4, type);
+			ps.setString(5, answer);
+			ps.setString(6, id);
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
