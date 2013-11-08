@@ -58,15 +58,41 @@ public class ExaminationServlet extends HttpServlet {
 			insert(request, response);
 		} else if("update".equals(method)) {
 			update(request, response);
+		} else if("destroy".equals(method)) {
+			destroy(request, response);
+		}
+	}
+	
+	private void destroy(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String id = request.getParameter("id");
+		Connection conn = DBUtil.getConn();
+		String sql = "delete from examination where id = ?";
+		try {
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, id);
+			int count = ps.executeUpdate();
+			if(count >= 1) {
+				response.getWriter().write("{\"success\":true}");
+			}else {
+				response.getWriter().write("{\"errorMsg\":删除失败！}");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(conn);
 		}
 	}
 	
 	private void insert(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String paperid = request.getParameter("paperid");
 		String papername = request.getParameter("papername");
+		papername = new String(papername.getBytes("ISO-8859-1"),"utf-8");
 		String content = request.getParameter("content");
+		content = new String(content.getBytes("ISO-8859-1"),"utf-8");
 		String type = request.getParameter("type");
 		String answer = request.getParameter("answer");
+		answer = new String(answer.getBytes("ISO-8859-1"),"utf-8");
 		Connection conn = DBUtil.getConn();
 		String sql = "insert into examination values (null, ?, ?, ?, ?, ?)";
 		try {
@@ -76,7 +102,12 @@ public class ExaminationServlet extends HttpServlet {
 			ps.setString(3, content);
 			ps.setString(4, type);
 			ps.setString(5, answer);
-			ps.executeUpdate();
+			int count = ps.executeUpdate();
+			if(count >= 1) {
+				response.getWriter().write("{\"success\":true}");
+			}else {
+				response.getWriter().write("{\"errorMsg\":删除失败！}");
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -89,6 +120,7 @@ public class ExaminationServlet extends HttpServlet {
 		String id = request.getParameter("id");
 		String paperid = request.getParameter("paperid");
 		String papername = request.getParameter("papername");
+		papername = new String(papername.getBytes("ISO-8859-1"),"utf-8");
 		String content = request.getParameter("content");
 		String type = request.getParameter("type");
 		String answer = request.getParameter("answer");
@@ -102,7 +134,12 @@ public class ExaminationServlet extends HttpServlet {
 			ps.setString(4, type);
 			ps.setString(5, answer);
 			ps.setString(6, id);
-			ps.executeUpdate();
+			int count = ps.executeUpdate();
+			if(count >= 1) {
+				response.getWriter().write("{\"success\":true}");
+			}else {
+				response.getWriter().write("{\"errorMsg\":删除失败！}");
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -209,7 +246,6 @@ public class ExaminationServlet extends HttpServlet {
 				elist.add(e);
 			}
 			response.setContentType("text/html;charset=utf-8");
-			String a = JSONArray.fromObject(elist).toString();
 			//String json = "{\"total\":\"1\",\"rows\":[{\"id\":\"41525\",\"firstname\":\"ddd\",\"lastname\":\"dfsa \",\"phone\":\"34343df\",\"email\":\"\"}]}";
 			String json = "{\"total\":\"" + 7 + "\", \"rows\":" + JSONArray.fromObject(elist).toString() + "}";
 			response.getWriter().write(json);

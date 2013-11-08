@@ -49,7 +49,9 @@
             closed="true" buttons="#dlg-buttons">
         <div class="ftitle">试题信息</div>
         <form id="fm" method="post" novalidate>
+        	<!-- 
         	<input type="hidden" name="id">
+        	 -->
             <div class="fitem">
                 <label>试题标识：</label>
                 <input name="paperid" class="easyui-validatebox" required="true">
@@ -88,7 +90,8 @@
             if (row){
                 $('#dlg').dialog('open').dialog('setTitle','编辑试题');
                 $('#fm').form('load',row);
-                url = '<%=request.getContextPath() %>/ExaminationServlet?method=update' + row.id;
+                url = '<%=request.getContextPath() %>/ExaminationServlet?method=update&id=' + row.id;
+                //alert(url);
             }
         }
         function saveUser(){
@@ -99,6 +102,7 @@
                 },
                 success: function(result){
                     var result = eval('('+result+')');
+                    //alert(result);
                     if (result.errorMsg){
                         $.messager.show({
                             title: 'Error',
@@ -116,7 +120,8 @@
             if (row){
                 $.messager.confirm('确认','您确认要删除当前所选择的记录吗？',function(r){
                     if (r){
-                        $.post('destroy_user.php',{id:row.id},function(result){
+                        $.post('<%=request.getContextPath() %>/ExaminationServlet?method=destroy',{id:row.id},function(result){
+                        	//alert(result);
                             if (result.success){
                                 $('#dg').datagrid('reload');    // reload the user data
                             } else {
