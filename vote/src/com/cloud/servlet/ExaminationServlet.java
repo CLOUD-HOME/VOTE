@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -122,8 +124,10 @@ public class ExaminationServlet extends HttpServlet {
 		String papername = request.getParameter("papername");
 		papername = new String(papername.getBytes("ISO-8859-1"),"utf-8");
 		String content = request.getParameter("content");
+		content = new String(content.getBytes("ISO-8859-1"),"utf-8");
 		String type = request.getParameter("type");
 		String answer = request.getParameter("answer");
+		answer = new String(answer.getBytes("ISO-8859-1"),"utf-8");
 		Connection conn = DBUtil.getConn();
 		String sql = "update examination set paperid = ?, papername = ?, content = ?, type = ?, answer = ? where id = ?";
 		try {
@@ -229,11 +233,25 @@ public class ExaminationServlet extends HttpServlet {
 	}
 
 	private void querye(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String sql = "select * from examination";
+		Enumeration<String> params = request.getParameterNames();
+		/**
+		 * 
+		for (Enumeration<String> e = params; e.hasMoreElements();)
+		       System.out.println(e.nextElement());
+		 */
+		int pagenumber = Integer.parseInt(request.getParameter("page"));
+		int pagesize = Integer.parseInt(request.getParameter("rows"));
+		int total = 0;
+		String sql = "select * from examination limit " + (pagenumber-1)*pagesize + "," + pagesize;
 		Connection conn = DBUtil.getConn();
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
+			PreparedStatement ps1 = conn.prepareStatement("select count(*) from examination");
+			ResultSet rs1 = ps1.executeQuery();
+			if(rs1.next()) {
+				total = rs1.getInt(1);
+			}
 			List<Examination> elist = new ArrayList<Examination>();
 			while(rs.next()) {
 				Examination e = new Examination();
@@ -247,7 +265,7 @@ public class ExaminationServlet extends HttpServlet {
 			}
 			response.setContentType("text/html;charset=utf-8");
 			//String json = "{\"total\":\"1\",\"rows\":[{\"id\":\"41525\",\"firstname\":\"ddd\",\"lastname\":\"dfsa \",\"phone\":\"34343df\",\"email\":\"\"}]}";
-			String json = "{\"total\":\"" + 7 + "\", \"rows\":" + JSONArray.fromObject(elist).toString() + "}";
+			String json = "{\"total\":\"" + total + "\", \"rows\":" + JSONArray.fromObject(elist).toString() + "}";
 			response.getWriter().write(json);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
