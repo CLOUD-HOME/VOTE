@@ -12,7 +12,7 @@
 <script type="text/javascript" src="<%=request.getContextPath() %>/easyui/jquery.easyui.min.js"></script>
 </head>
 <body style="text-align:center;">
-    <h2>宁波思库网络科技有限公司后台管理</h2>
+    <h2>问达后台管理</h2>
     <div style="margin:10px 0;"></div>
     <div align="center">
     <div class="easyui-panel"  title="后台管理登录窗" style="width:400px">

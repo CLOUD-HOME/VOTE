@@ -17,8 +17,7 @@
 </style>
 </head>
 <body>
-    <h2>试题维护页面</h2>
-    
+    <h2 align="left">试题维护页面<span style="padding-left: 100px;"><a href="<%=request.getContextPath() %>/EmployeeServlet?method=logout">退出系统</a></span></h2>
     <table id="dg" title="试题列表" class="easyui-datagrid" style="width:1000px;height:500px"
     		data-options="singleSelect:true,collapsible:true,url:'<%=request.getContextPath() %>/ExaminationServlet?method=querye',method:'get'"
             <%--
@@ -66,7 +65,11 @@
             </div>
             <div class="fitem">
                 <label>试题类型：</label>
-                <input name="type" class="easyui-validatebox" required="true">
+                <select id="type" name="type" style="width: 205px;">
+                	<option value="0">填空题</option>
+                	<option value="1">单选题</option>
+                	<option value="2">多选题</option>
+                </select>
             </div>
             <div class="fitem">
                 <label>试题答案：</label>
@@ -98,7 +101,12 @@
             $('#fm').form('submit',{
                 url: url,
                 onSubmit: function(){
-                    return $(this).form('validate');
+                	//alert($(this).form('validate'));
+                	if($(this).form('validate')) {
+                		//alert($('#type').val() != null);
+	                    return $('#type').val() != null;
+                	}
+                	return false;
                 },
                 success: function(result){
                     var result = eval('('+result+')');

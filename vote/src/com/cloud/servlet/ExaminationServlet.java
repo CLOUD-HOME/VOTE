@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONArray;
 
+import com.cloud.model.Employee;
 import com.cloud.model.Examination;
 import com.cloud.util.DBUtil;
 
@@ -185,7 +186,15 @@ public class ExaminationServlet extends HttpServlet {
 	
 	private void query(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Connection conn = DBUtil.getConn();
-		String temp = "select distinct paperid, papername from examination order by id desc limit 0, 10";
+		Employee employee = (Employee) request.getSession().getAttribute("employee");
+		String temp = null;
+		if(employee == null) {
+			temp = "select distinct paperid, papername from examination order by id desc limit 0, 10";
+		} else {
+			temp = "SELECT DISTINCT	examination.paperid, examination.papername FROM examination LEFT JOIN answer ON examination.id = answer.examid" +
+				   " WHERE answer.userid IS NULL ORDER BY examination.id DESC LIMIT 0, 10";
+		}
+		System.out.println(temp);
 		try {
 			PreparedStatement ps = conn.prepareStatement(temp);
 			ResultSet rs = ps.executeQuery();

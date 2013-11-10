@@ -55,9 +55,11 @@ public class AnswerServlet extends HttpServlet {
 		String paperid = request.getParameter("paperid");
 		String fcount = request.getParameter("fcount");
 		String scount = request.getParameter("scount");
+		String mcount = request.getParameter("mcount");
 		Employee e = (Employee) request.getSession().getAttribute("employee");
 		Integer userid = e.getId();
-		int temp = Integer.parseInt(fcount);
+		int temp1 = Integer.parseInt(fcount);
+		int temp2 = Integer.parseInt(fcount) + Integer.parseInt(scount);
 		List<String> sqls = new ArrayList<String>();
 		for (int i = 0; i < Integer.parseInt(fcount); i++) {
 			//System.out.println(request.getParameter("answer" + i+1));
@@ -69,16 +71,26 @@ public class AnswerServlet extends HttpServlet {
 			for (int j = 0; j < arr1.length; j++) {
 				sb1.append(new String(arr1[j].getBytes("ISO-8859-1"),"utf-8")+"#");
 				sb2.append(arr2[j]+"#");
-				System.out.println(arr1[j]);
-				System.out.println(arr2[j]);
+				//System.out.println(arr1[j]);
+				//System.out.println(arr2[j]);
 			}
-			String sql = "insert into answer values (null, "+ userid +", "+ sb2.toString().split("#")[0] +", '"+ sb1.toString().substring(0,sb1.toString().length()-1) +"', "+ paperid +");";
+			String sql = "insert into answer values (null, "+ userid +", "+ sb2.toString().split("#")[0] +",'"+ sb1.toString().substring(0,sb1.toString().length()-1) +"',"+ paperid +");";
 			sqls.add(sql);
 			System.out.println(sql);
 		}
-		for (int i = temp; i < temp + Integer.parseInt(scount); i++) {
+		for (int i = temp1; i < temp1 + Integer.parseInt(scount); i++) {
 			System.out.println(request.getParameter("answer" + (i+1)));
-			String sql = "insert into answer values (null, "+ userid +", "+ request.getParameter("id" + (i+1)) +",' "+ request.getParameter("answer" + (i+1)) +"', "+ paperid +");";
+			String sql = "insert into answer values (null, "+ userid +", "+ request.getParameter("id" + (i+1)) +",'"+ request.getParameter("answer" + (i+1)) +"',"+ paperid +");";
+			sqls.add(sql);
+			System.out.println(sql);
+		}
+		for (int i = temp2; i < temp2 + Integer.parseInt(mcount); i++) {
+			StringBuffer sb = new StringBuffer();
+			String[] arr = request.getParameterValues("answer" + (i+1));
+			for (int j = 0; j < arr.length; j++) {
+				sb.append(arr[j]+"#");
+			}
+			String sql = "insert into answer values (null, "+ userid +", "+ request.getParameter("id" + (i+1)) +",'"+ sb.toString().substring(0,sb.toString().length()-1) +"',"+ paperid +");";
 			sqls.add(sql);
 			System.out.println(sql);
 		}

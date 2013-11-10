@@ -50,7 +50,7 @@
 		<form method="post">
 		<table>
 			<tr>
-				<td style="padding-left: 10px;"><strong>宁波思库网络科技有限公司</strong></td>
+				<td style="padding-left: 10px;"><strong>问达</strong></td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>

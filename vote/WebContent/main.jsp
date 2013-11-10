@@ -83,7 +83,7 @@
 	<div class="div_area">
 		<table>
 			<tr>
-				<td style="padding-left: 10px;"><strong>宁波思库网络科技有限公司欢迎您！</strong></td>
+				<td style="padding-left: 10px;"><strong>问达欢迎您！</strong></td>
 			</tr>
 			<tr>
 				<td colspan="5" style="padding-left: 10px;">&nbsp;</td>

@@ -38,7 +38,10 @@ public class EmployeeServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		String method = request.getParameter("method");
+		if("logout".equals(method)) {
+			logout(request, response);
+		}
 	}
 
 	/**
@@ -228,6 +231,18 @@ public class EmployeeServlet extends HttpServlet {
 		} finally {
 			DBUtil.close(c);
 		}
+	}
+	
+	private void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Object object = request.getSession().getAttribute("employee");
+		if (object != null) {
+			try {
+				request.getSession().removeAttribute("employee");
+			} catch (Exception e) {
+				object = null;
+			}
+		}
+		response.sendRedirect(request.getContextPath()+ "/admin");
 	}
 
 }
