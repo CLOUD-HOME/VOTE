@@ -49,6 +49,10 @@ public class ExaminationServlet extends HttpServlet {
 			search(request, response);
 		} else if("querye".equals(method)) {
 			querye(request,response);
+		} else if("destroy".equals(method)) {
+			destroy(request, response);
+		} else if("querys".equals(method)) {
+			querys(request,response);
 		}
 	}
 
@@ -70,6 +74,8 @@ public class ExaminationServlet extends HttpServlet {
 		String id = request.getParameter("id");
 		Connection conn = DBUtil.getConn();
 		String sql = "delete from examination where id = ?";
+		String msg = "无法删除，因为已经有用户答过此题目！";
+		msg = new String(msg.getBytes("utf-8"),"iso8859-1");
 		try {
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1, id);
@@ -80,7 +86,7 @@ public class ExaminationServlet extends HttpServlet {
 				response.getWriter().write("{\"errorMsg\":删除失败！}");
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			response.getWriter().write("{\"success\":false,\"errorMsg\":\""+ msg +"\"}");
 			e.printStackTrace();
 		} finally {
 			DBUtil.close(conn);
@@ -157,24 +163,50 @@ public class ExaminationServlet extends HttpServlet {
 	private void find(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String paperid = request.getParameter("paperid");
 		Connection conn = DBUtil.getConn();
+		String sql = "SELECT * FROM answer WHERE paperid = ? and userid = ? limit 0,1";
 		String temp = "select * from examination where paperid = ?";
+		String sql2 = "SELECT examination.id, examination.paperid, examination.papername, examination.content, examination.type, answer.answer FROM examination LEFT JOIN answer ON examination.id = answer.examid WHERE answer.paperid = ? AND userid = ?";
 		try {
-			PreparedStatement ps = conn.prepareStatement(temp);
-			ps.setString(1, paperid);
-			ResultSet rs = ps.executeQuery();
-			List<Examination> elist = new ArrayList<Examination>();
-			while(rs.next()) {
-				Examination e = new Examination();
-				e.setAnswer(rs.getString("answer"));
-				e.setContent(rs.getString("content"));
-				e.setId(rs.getInt("id"));
-				e.setPaperid(rs.getInt("paperid"));
-				e.setType(rs.getString("type"));
-				e.setPapername(rs.getString("papername"));
-				elist.add(e);
+			PreparedStatement ps1 = conn.prepareStatement(sql);
+			ps1.setString(1, paperid);
+			ps1.setInt(2, ((Employee)request.getSession().getAttribute("employee")).getId());
+			ResultSet rs1 = ps1.executeQuery();
+			if(rs1.next()) {
+				PreparedStatement ps = conn.prepareStatement(sql2);
+				ps.setString(1, paperid);
+				ps.setInt(2, ((Employee)request.getSession().getAttribute("employee")).getId());
+				ResultSet rs = ps.executeQuery();
+				List<Examination> elist = new ArrayList<Examination>();
+				while(rs.next()) {
+					Examination e = new Examination();
+					e.setAnswer(rs.getString("answer"));
+					e.setContent(rs.getString("content"));
+					e.setId(rs.getInt("id"));
+					e.setPaperid(rs.getInt("paperid"));
+					e.setType(rs.getString("type"));
+					e.setPapername(rs.getString("papername"));
+					elist.add(e);
+				}
+				request.setAttribute("elist", elist);
+				request.getRequestDispatcher("/show.jsp").forward(request, response);
+			} else {
+				PreparedStatement ps = conn.prepareStatement(temp);
+				ps.setString(1, paperid);
+				ResultSet rs = ps.executeQuery();
+				List<Examination> elist = new ArrayList<Examination>();
+				while(rs.next()) {
+					Examination e = new Examination();
+					e.setAnswer(rs.getString("answer"));
+					e.setContent(rs.getString("content"));
+					e.setId(rs.getInt("id"));
+					e.setPaperid(rs.getInt("paperid"));
+					e.setType(rs.getString("type"));
+					e.setPapername(rs.getString("papername"));
+					elist.add(e);
+				}
+				request.setAttribute("elist", elist);
+				request.getRequestDispatcher("/content.jsp").forward(request, response);
 			}
-			request.setAttribute("elist", elist);
-			request.getRequestDispatcher("/content.jsp").forward(request, response);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -191,8 +223,39 @@ public class ExaminationServlet extends HttpServlet {
 		if(employee == null) {
 			temp = "select distinct paperid, papername from examination order by id desc limit 0, 10";
 		} else {
-			temp = "SELECT DISTINCT	examination.paperid, examination.papername FROM examination LEFT JOIN answer ON examination.id = answer.examid" +
-				   " WHERE answer.userid IS NULL ORDER BY examination.id DESC LIMIT 0, 10";
+			temp = "SELECT DISTINCT	paperid, papername FROM	examination WHERE paperid NOT IN (SELECT DISTINCT paperid FROM answer WHERE userid = "+ employee.getId() +")";
+		}
+		System.out.println(temp);
+		try {
+			PreparedStatement ps = conn.prepareStatement(temp);
+			ResultSet rs = ps.executeQuery();
+			List<Examination> plist = new ArrayList<Examination>();
+			while(rs.next()) {
+				Examination e = new Examination();
+				e.setPaperid(rs.getInt("paperid"));
+				e.setPapername(rs.getString("papername"));
+				plist.add(e);
+			}
+			request.setAttribute("plist", plist);
+			request.getRequestDispatcher("/main.jsp").forward(request, response);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DBUtil.close(conn);
+		}
+	}
+	
+	
+	private void querys(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Connection conn = DBUtil.getConn();
+		Employee employee = (Employee) request.getSession().getAttribute("employee");
+		String temp = null;
+		if(employee == null) {
+			response.sendRedirect(request.getContextPath() + "/register.jsp");
+			return;
+		} else {
+			temp = "SELECT DISTINCT examination.paperid, examination.papername FROM answer LEFT JOIN examination ON answer.paperid = examination.paperid WHERE answer.userid = " + employee.getId();
 		}
 		System.out.println(temp);
 		try {

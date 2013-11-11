@@ -129,7 +129,7 @@
                 $.messager.confirm('确认','您确认要删除当前所选择的记录吗？',function(r){
                     if (r){
                         $.post('<%=request.getContextPath() %>/ExaminationServlet?method=destroy',{id:row.id},function(result){
-                        	//alert(result);
+                        	//alert(result.success);
                             if (result.success){
                                 $('#dg').datagrid('reload');    // reload the user data
                             } else {

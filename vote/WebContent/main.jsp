@@ -84,6 +84,7 @@
 		<table>
 			<tr>
 				<td style="padding-left: 10px;"><strong>问达欢迎您！</strong></td>
+				<td><span style="width: 300px; float: right;"><a href="<%=request.getContextPath()%>/ExaminationServlet?method=querys">已答问卷列表</a>&nbsp;&nbsp;<a href="<%=request.getContextPath()%>/ExaminationServlet?method=query">未答问卷列表</a></span></td>
 			</tr>
 			<tr>
 				<td colspan="5" style="padding-left: 10px;">&nbsp;</td>

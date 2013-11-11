@@ -259,7 +259,7 @@ addLoadEvent(function(){
 </script>
 </head>
 <body>
-<h3><a href="<%=request.getContextPath()%>/ExaminationServlet?method=query">返回选择列表</a></h3>
+<h3><a href="<%=request.getContextPath()%>/ExaminationServlet?method=querys">返回选择列表</a></h3>
 	<table style="width:771px;margin :  5px 0px 15px 5px;margin-left:auto;margin-right:auto" align="center">
 		<tr>
 			<td>
@@ -293,6 +293,8 @@ addLoadEvent(function(){
  								}
  								k = k + 1;
  								String content = e.getContent();
+ 								String answer = e.getAnswer();
+ 								String[] a2 = answer.split("#");
  								//String temp = content.substring(1).substring(0, content.substring(1).length()-1);
  								String[] a1 = (content).split("_");
  								//content = content.replaceAll("_", "<input>");
@@ -303,24 +305,32 @@ addLoadEvent(function(){
  							<%
  								if(a1.length == 1) {
  							%>
- 						<tr><td><strong><%=content.replaceAll("_", "<input class='input_line required text' name='answer" + k + "'>") %></strong><br>
+ 						<tr><td><strong><%=content.replaceAll("_", "<input readonly='true' class='input_line required text' value='" + e.getAnswer() + "' name='answer" + k + "'>") %></strong><br>
  								<input type="hidden" value="<%=e.getId() %>" name="id<%=k%>">
  							<%
  								} else if(a1.length > 1) {
  							%>
- 						<tr><td><strong><%=content.replaceAll("_", "<input class='input_line required text' name='answer" + k + "'>") %></strong><br>
+ 						<tr><td><strong>
  							<!-- 
  								答案：
  							-->
  							<%
- 									for(int j=1; j<a1.length; j++) {
+ 									StringBuffer sb = new StringBuffer();
+ 									for(int j=0; j<a1.length; j++) {
+ 										if(j==a1.length-1) {
+ 											sb.append(a1[j]);
+ 										}else{
+ 											sb.append(a1[j] + "<input readonly='true' value='" + a2[j] + "' class='input_line required text' name='answer" + k + "'>");
+ 										}
  							%>
+ 								
  								<input type="hidden" value="<%=e.getId() %>" name="id<%=k%>">
  							<%
  									}
+ 									out.write(sb.toString());
  								}
  							%>
- 						</td></tr>
+ 						</strong><br></td></tr>
  						<%
  							}
  							fcount = k;
@@ -343,9 +353,15 @@ addLoadEvent(function(){
 							<input type="hidden" value="<%=e.getId() %>" name="id<%=k%>">
 							<%
 								for(int j=0; j<a2.length; j++) {
+									if(Integer.parseInt(e.getAnswer()) != j+1){
 							%>
-							<input type="radio" name="answer<%=k %>" value="<%=j+1 %>" id="<%=k%><%=j+1%>"> <label onmouseover="this.className='over';" onmouseout="this.className='out';" for="11" class="out"><%=a2[j] %></label><br>
+							<input disabled="disabled" type="radio" name="answer<%=k %>" value="<%=j+1 %>" id="<%=k%><%=j+1%>"> <label onmouseover="this.className='over';" onmouseout="this.className='out';" for="11" class="out"><%=a2[j] %></label><br>
 							<%
+									}else{
+							%>
+							<input disabled="disabled" checked="checked" type="radio" name="answer<%=k %>" value="<%=j+1 %>" id="<%=k%><%=j+1%>"> <label onmouseover="this.className='over';" onmouseout="this.className='out';" for="11" class="out"><%=a2[j] %></label><br>
+							<%
+									}
 								} 
 							%>
 							<br><br>
@@ -371,9 +387,25 @@ addLoadEvent(function(){
 							<input type="hidden" value="<%=e.getId() %>" name="id<%=k%>">
 							<%
 								for(int j=0; j<a2.length; j++) {
+									String[] arr = e.getAnswer().split("#"); 
+									boolean flag = false;
+									for(int m=0; m<arr.length; m++){
+										if(Integer.parseInt(arr[m]) == j+1){
+							%>
+							<input type="checkbox" checked="checked" disabled="disabled" name="answer<%=k %>" value="<%=j+1 %>" id="<%=k%><%=j+1%>"> <label onmouseover="this.className='over';" onmouseout="this.className='out';" for="11" class="out"><%=a2[j] %></label><br>
+							<%
+											flag = true;
+											break;
+										}
+									}
+									
+									if(flag) {
+										continue;
+									}else {
 							%>
 							<input type="checkbox" name="answer<%=k %>" value="<%=j+1 %>" id="<%=k%><%=j+1%>"> <label onmouseover="this.className='over';" onmouseout="this.className='out';" for="11" class="out"><%=a2[j] %></label><br>
 							<%
+									}
 								} 
 							%>
 							<br><br>
@@ -383,9 +415,11 @@ addLoadEvent(function(){
  							}
  							mcount = k - mcount;
 						%>
+						<!-- 
 						<tr>
 							<td colspan="2" align="center"><button style="font-size: 1.0em;" id="button"><span class="ui-button-text">提交答案</span></button></td>
 						</tr>
+						 -->
 					</table>
 					<input type="hidden" value="<%=fcount %>" name="fcount">
 					<input type="hidden" value="<%=scount %>" name="scount">

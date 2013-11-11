@@ -93,8 +93,10 @@ public class EmployeeServlet extends HttpServlet {
 				ResultSet rs = ps.executeQuery();
 				while(rs.next()) {
 					Employee e = new Employee();
+					int id = rs.getInt("id");
 					String email = rs.getString("email");
 					String password = rs.getString("password");
+					e.setId(id);
 					e.setEmail(email);
 					e.setPassword(password);
 					request.getSession().setAttribute("employee", e);
