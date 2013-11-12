@@ -53,7 +53,7 @@
         		},
         		success:function(data){
         			if(data == 1) {
-        			window.location.href="<%=request.getContextPath()%>/admin/main.jsp";
+        			window.location.href="<%=request.getContextPath()%>/admin/facade.jsp";
         			}else{
         				$("#msg").html("<font color='red'>邮件或者密码错误<font>");
         			}
