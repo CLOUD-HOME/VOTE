@@ -34,7 +34,7 @@
 <TableData name="ds4" class="com.fr.data.impl.DBTableData">
 <Parameters>
 <Parameter>
-<Attributes name="abc"/>
+<Attributes name="paperid"/>
 <O>
 <![CDATA[1]]></O>
 </Parameter>
@@ -47,14 +47,14 @@
 <Query>
 <![CDATA[SELECT
 	e.content,
+	e.papername,
 	u.email,
 	a.answer
 FROM
 	answer AS a
 LEFT JOIN examination AS e ON a.examid = e.id
 LEFT JOIN employee AS u ON a.userid = u.id
-WHERE
-	a.paperid = ${abc}]]></Query>
+WHERE e.paperid = ${paperid}]]></Query>
 </TableData>
 </TableDataMap>
 <Report class="com.fr.report.worksheet.WorkSheet" name="sheet2">
@@ -70,6 +70,8 @@ WHERE
 <![CDATA[5448300,15887700,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200]]></ColumnWidth>
 <CellElementList>
 <C c="0" r="0" s="0">
+<O>
+<![CDATA[邮箱]]></O>
 <Expand/>
 </C>
 <C c="1" r="0" s="0">
@@ -120,31 +122,6 @@ WHERE
 <WidgetName name="para"/>
 <WidgetAttr/>
 <Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
-<InnerWidget class="com.fr.form.ui.Label">
-<WidgetName name="Labelabc"/>
-<WidgetAttr/>
-<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
-<FRFont name="SimSun" style="0" size="72"/>
-<widgetValue>
-<O>
-<![CDATA[abc:]]></O>
-</widgetValue>
-</InnerWidget>
-<BoundsAttr x="50" y="25" width="80" height="21"/>
-</Widget>
-<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
-<InnerWidget class="com.fr.form.ui.TextEditor">
-<WidgetName name="abc"/>
-<WidgetAttr/>
-<TextAttr/>
-<widgetValue>
-<O>
-<![CDATA[1]]></O>
-</widgetValue>
-</InnerWidget>
-<BoundsAttr x="130" y="25" width="80" height="21"/>
-</Widget>
-<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
 <InnerWidget class="com.fr.report.web.ui.impl.form.FormSubmitButton">
 <WidgetName name="Search"/>
 <WidgetAttr/>
@@ -153,15 +130,49 @@ WHERE
 <Hotkeys>
 <![CDATA[enter]]></Hotkeys>
 </InnerWidget>
-<BoundsAttr x="560" y="25" width="80" height="21"/>
+<BoundsAttr x="323" y="25" width="80" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.Label">
+<WidgetName name="Labelpaperid"/>
+<WidgetAttr/>
+<LabelAttr verticalcenter="true" textalign="0" autoline="true"/>
+<FRFont name="SimSun" style="0" size="72"/>
+<widgetValue>
+<O>
+<![CDATA[试卷题目：]]></O>
+</widgetValue>
+</InnerWidget>
+<BoundsAttr x="50" y="25" width="80" height="21"/>
+</Widget>
+<Widget class="com.fr.form.ui.container.WAbsoluteLayout$BoundsWidget">
+<InnerWidget class="com.fr.form.ui.ComboBox">
+<WidgetName name="paperid"/>
+<WidgetAttr/>
+<allowBlank>
+<![CDATA[false]]></allowBlank>
+<Dictionary class="com.fr.data.impl.DatabaseDictionary">
+<FormulaDictAttr ki="1" vi="2"/>
+<DBDictAttr tableName="examination" schemaName="" ki="1" vi="2"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[local]]></DatabaseName>
+</Connection>
+</Dictionary>
+<widgetValue>
+<O>
+<![CDATA[1]]></O>
+</widgetValue>
+</InnerWidget>
+<BoundsAttr x="130" y="25" width="167" height="21"/>
 </Widget>
 <LCAttr vgap="0" hgap="0"/>
 </Layout>
 </ParameterUI>
 <Parameter>
-<Attributes name="abc"/>
+<Attributes name="papername"/>
 <O>
-<![CDATA[1]]></O>
+<![CDATA[工艺美术调查表]]></O>
 </Parameter>
 </ReportParameterAttr>
 <StyleList>
