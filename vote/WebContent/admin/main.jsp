@@ -1,5 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+<%@ page import="com.cloud.model.Employee" %>
+<%
+	Employee e = (Employee)request.getSession().getAttribute("employee");
+	if(e==null) {
+		response.sendRedirect(request.getContextPath() + "/EmployeeServlet?method=logout");
+	}
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -15,9 +22,14 @@
 		width: 200px;
 	}
 </style>
+<script type="text/javascript">
+	function back() {
+		
+	}
+</script>
 </head>
 <body>
-    <h2 align="left">试题维护页面<span style="padding-left: 100px;"><a href="<%=request.getContextPath() %>/EmployeeServlet?method=logout">退出系统</a></span></h2>
+    <h2 align="left">试题维护页面<span style="padding-left: 100px;"><a href="<%=request.getContextPath() %>/EmployeeServlet?method=logout">退出系统</a></span><span style="padding-left: 100px;"><a onclick="back()" href="javascript:history.go(-1);">返回</a></span></h2>
     <table id="dg" title="试题列表" class="easyui-datagrid" style="width:1000px;height:500px"
     		data-options="singleSelect:true,collapsible:true,url:'<%=request.getContextPath() %>/ExaminationServlet?method=querye',method:'get'"
             <%--

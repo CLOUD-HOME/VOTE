@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -28,7 +29,7 @@
                 </tr>
                 <tr>
                     <td>密码:</td>
-                    <td><input class="easyui-validatebox" type="text" name="password" data-options="required:true"></input></td>
+                    <td><input class="easyui-validatebox" type="password" name="password" data-options="required:true"></input></td>
                 </tr>
                 <tr>
                 	<td></td>

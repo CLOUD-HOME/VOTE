@@ -106,7 +106,7 @@
 			</tr>
 			<tr>
 				<td width="40%" align="right">邮箱：</td>
-				<td><input onmouseout="vemail()" id="email" name="email" style="height: 25px;" size="30px;"></td>
+				<td><input onblur="vemail()" id="email" name="email" style="height: 25px;" size="30px;"></td>
 			</tr>
 			<tr>
 				<td></td>
@@ -114,7 +114,7 @@
 			</tr>
 			<tr>
 				<td width="40%" align="right">密码：</td>
-				<td><input onmouseout="vpassword()" type="password" id="password" name="password" style="height: 25px;" size="30px;"></td>
+				<td><input onblur="vpassword()" type="password" id="password" name="password" style="height: 25px;" size="30px;"></td>
 			</tr>
 			<tr>
 				<td></td>
@@ -125,7 +125,7 @@
 				<%} %>
 			</tr>
 			<tr>
-				<td colspan="2" align="center"><button type="button" onclick="register()" style="font-size: 0.6em;" id="button"><span class="ui-button-text">同意协议并注册</span></button></td>
+				<td colspan="2" align="center"><button type="button" onclick="register()" style="font-size: 0.6em;" id="button"><span class="ui-button-text">登入问达系统</span></button></td>
 			</tr>
 		</table>
 		</form>
